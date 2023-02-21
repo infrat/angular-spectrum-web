@@ -165,7 +165,7 @@ export class ChartConfigurationService {
   }
   constructor() { }
 
-  applyDynamicOptions(config: { datasets: ChartConfiguration['data'], options: ChartConfiguration['options'] }) {
+  public applyDynamicOptions(config: { datasets: ChartConfiguration['data'], options: ChartConfiguration['options'] }) {
     const { options } = config;
     if (options?.scales?.['y']) {
       options.scales['y'].type = this.yAxisScale;
@@ -174,7 +174,7 @@ export class ChartConfigurationService {
       options.scales['x'].type = this.xAxisScale;
     }
   }
-  getChartDatasets() {
+  public getChartDatasets() {
     if (this.chartType !== 'line' && this.chartType !== 'scatter' && this.chartType !== 'bar') {
       throw new Error('Unsupported chart type');
     }
@@ -183,7 +183,7 @@ export class ChartConfigurationService {
     return config.datasets;
   }
 
-  getChartOptions() {
+  public getChartOptions() {
     if (this.chartType !== 'line' && this.chartType !== 'scatter' && this.chartType !== 'bar') {
       throw new Error('Unsupported chart type');
     }

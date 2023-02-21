@@ -6,7 +6,7 @@ import { defaultParameters as defaults } from '../configuration/default-paramete
 })
 export class ParametersService {
   constructor() { }
-  get(key: keyof typeof defaults): string | number | boolean {
+  public get(key: keyof typeof defaults): string | number | boolean {
     return localStorage.getItem(key) || defaults[key];
   }
 }

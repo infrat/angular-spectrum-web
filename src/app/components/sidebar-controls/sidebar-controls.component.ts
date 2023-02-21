@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 import { ConnectionStatusEnum } from '../../connection.status.enum';
@@ -20,29 +20,81 @@ export class SidebarControlsComponent implements Timeable {
   protected backgroundRt: number = 0;
   protected spectrumRt: number = 0;
   protected origin: DataOrigin = 'background';
+  protected backgroundExportReady: boolean = false; 
+  protected spectrumExportReady: boolean = false; 
+  
   protected acqTimeout: number = 0;
   protected acqTimeoutEnabled: boolean = false;
   protected acqTimeoutValue: number = 0;
   @Output() setOrigin = new EventEmitter<DataOrigin>();
+  @Output() exportBuffer = new EventEmitter<DataOrigin>();
 
   constructor(private modalService: NgbModal, protected dataSource: SerialDataSourceService, protected timer: TimerService, private eventBus: NgEventBus) {}
-  connect() {
+  public connect() {
     this.dataSource.connect();
   }
 
-  enableRegime(acqTimeoutValue: number) {
+  public resetSessionTrigger() {
+    this.eventBus.cast(EventsEnum.RESET_SESSION);
+  }
+
+  public setRegime(acqTimeoutValue: number) {
+    if (!this.timer.realTime) {
+      return;
+    }
+    if (this.acqTimeoutEnabled && acqTimeoutValue <= this.timer.realTime) {
+      this.acqTimeoutValue = this.acqTimeout;
+      return;
+    }
+    this.acqTimeout = acqTimeoutValue;
+  }
+
+  public toggleRegime(acqTimeoutValue: number) {
+    if (!this.acqTimeoutEnabled && acqTimeoutValue <= this.timer.realTime) {
+      alert('ACQ Timeout value can\'t be smaller than actual Real Time value');
+      return;
+    }
     this.acqTimeoutEnabled = !this.acqTimeoutEnabled;
     this.acqTimeout = acqTimeoutValue;
   }
 
-  acqBackground() {
+  public acqBackground() {
     this.origin = 'background';
     this.setOrigin.emit('background');
+    if (this.dataSource.castActive) {
+      this.timer.resetTimer();
+      this.dataSource.clearBuffer();
+    }
   }
 
-  acqSpectrum() {
+  public acqSpectrum() {
     this.origin = 'spectrum';
     this.setOrigin.emit('spectrum');
+    if (this.dataSource.castActive) {
+      this.timer.resetTimer();
+      this.dataSource.clearBuffer();
+    }
+  }
+
+  public acquire(origin: DataOrigin) {
+    this.origin = origin;
+    this.setOrigin.emit(origin);
+    if (this.dataSource.castActive) {
+      this.timer.resetTimer();
+      this.dataSource.clearBuffer();
+    }
+  }
+
+  public export(origin: DataOrigin) {
+    this.exportBuffer.emit(origin);
+  }
+
+  public setSpectrumCapacity(value: number) {
+    this.spectrumExportReady = value > 0;
+  }
+
+  setBackgroundCapacity(value: number) {
+    this.backgroundExportReady = value > 0;
   }
 
   openSettings() {
@@ -54,8 +106,7 @@ export class SidebarControlsComponent implements Timeable {
       return;
     }
     if (this.acqTimeoutEnabled) {
-      this.acqTimeout = this.acqTimeoutValue - this.timer.realTime;
-      if (this.acqTimeout <= 0) {
+      if (this.acqTimeout <= this.timer.realTime) {
         this.eventBus.cast(EventsEnum.GLOBAL_TIMER_STOP);
       }
     }
@@ -65,5 +116,13 @@ export class SidebarControlsComponent implements Timeable {
     if (this.origin === 'spectrum') {
       this.spectrumRt = this.timer.realTime;
     }
+  }
+
+  resetSession() {
+    this.dataSource.clearBuffer();
+    this.backgroundRt = 0;
+    this.spectrumRt = 0;
+    this.origin = 'background';
+    this.acqTimeout = this.acqTimeoutValue;
   }
 }

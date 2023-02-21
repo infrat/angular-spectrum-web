@@ -28,6 +28,10 @@ export class AppComponent {
     this.chart.origin = origin;
   }
 
+  test(value: number) {
+    console.log(value);
+  }
+
   setupSubscriptions() {
     this.eventBus.on(EventsEnum.GLOBAL_TIMER_TICK).subscribe(() => {
       this.sidebarStatus.handleTick();
@@ -44,6 +48,12 @@ export class AppComponent {
     this.eventBus.on(EventsEnum.INCOMING_DATA).subscribe(({ data }) => { 
       this.chart.handleData(data);
       this.sidebarStatus.handleData(data)
+    });
+    this.eventBus.on(EventsEnum.RESET_SESSION).subscribe(({ data }) => { 
+      this.timer.resetTimer();
+      this.chart.resetSession();
+      this.sidebarControls.resetSession()
+      this.sidebarStatus.resetSession()
     });
   }
 }

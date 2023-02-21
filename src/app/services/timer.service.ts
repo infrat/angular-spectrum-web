@@ -11,13 +11,14 @@ export class TimerService {
 
   public startTime: number = 0;
   private timer: any;
-  public realTime: number|undefined;
+  public realTime: number = 0;
   public liveTime: number = 0;
   public deadTime: number = 0;
+  public timerActive: boolean = false;
 
   constructor(private eventBus: NgEventBus) { }
 
-  tick() {
+  private tick() {
     if (!this.startTime) {
       return;
     }
@@ -25,12 +26,21 @@ export class TimerService {
     this.realTime = Math.floor((currTime - this.startTime) / 1000);
     this.eventBus.cast(EventsEnum.GLOBAL_TIMER_TICK);
   }
-  startTimer() {
+  public startTimer() {
     this.startTime = new Date().getTime();
+    this.timerActive = true;
     this.timer = setInterval(() => this.tick(), this.INTERVAL);
   }
-  stopTimer() {
+  public stopTimer() {
+    this.timerActive = false;
     clearInterval(this.timer);
   }
-  resetTimer() {}
+  public resetTimer() {
+    const timerActive = this.timerActive;
+    this.stopTimer();
+    this.realTime = 0;
+    this.liveTime = 0;
+    this.deadTime = 0;
+    this.startTimer();
+  }
 }

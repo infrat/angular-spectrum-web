@@ -2,26 +2,39 @@
     <button (click)="connect()"
         [ngClass]="{'btn-success' : dataSource.connectionStatus === connectionStatus.CONNECTED, 'btn-outline-dark': dataSource.connectionStatus === connectionStatus.DISCONNECTED}"
         class="btn btn-outline-dark btn-sm" id="connect-btn">Connect</button>
-    <button onclick="app.resetSession()" class="btn btn-outline-dark btn-block btn-sm">Reset
+    <button (click)="resetSessionTrigger()" class="btn btn-outline-dark btn-block btn-sm"
+        [disabled]="dataSource.connectionStatus === connectionStatus.DISCONNECTED">Reset
         session</button>
     <button class="btn btn-outline-dark btn-block btn-sm" (click)="openSettings()">ACQ Settings</button>
-    <button onclick="app.exportSPE('background')" id="exportBackgroundSPE" class="btn btn-outline-dark btn-block btn-sm"
-        disabled>Export Background SPE</button>
-    <button onclick="app.exportSPE('spectrum')" id="exportSpectrumSPE" class="btn btn-outline-dark btn-block btn-sm"
-        disabled>Export Spectrum SPE</button>
+    <button (click)="export('background')" class="btn btn-outline-dark btn-block btn-sm"
+        [disabled]="!backgroundExportReady">Export Background SPE</button>
+    <button (click)="export('spectrum')" class="btn btn-outline-dark btn-block btn-sm"
+        [disabled]="!spectrumExportReady">Export Spectrum SPE</button>
 
-    <input (click)="acqBackground()" type="radio" class="btn-check" name="btnradio" id="acq-background" checked>
+    <input (click)="acquire('background')" type="radio" class="btn-check" name="btnradio" id="acq-background"
+        [checked]="origin === 'background'">
     <label class="btn btn-outline-dark btn-block btn-sm" for="acq-background">ACQ Background (RT [s]: <span
             [textContent]="backgroundRt">0</span>)</label>
 
-    <input (click)="acqSpectrum()" type="radio" class="btn-check" name="btnradio" id="acq-spectrum">
+    <input (click)="acquire('spectrum')" type="radio" class="btn-check" name="btnradio" id="acq-spectrum"
+        [checked]="origin === 'spectrum'">
     <label class="btn btn-outline-dark btn-block btn-sm" for="acq-spectrum">ACQ Spectrum (RT [s]: <span
             [textContent]="spectrumRt">0</span>)</label>
     <div class="input-group">
         <span class="input-group-text" id="basic-addon3">ACQ Time [s]</span>
-        <input type="text" class="form-control" [(ngModel)]="acqTimeoutValue" aria-describedby="basic-addon3" positiveIntegers
-            value="0">
-        <button type="button" (click)="enableRegime(acqTimeoutValue)" id="enableRegimeButton" [textContent]="acqTimeoutEnabled ? 'Disable' : 'Enable'" class="btn btn-dark">Enable</button>
+        <input type="text" class="form-control" (blur)="setRegime(acqTimeoutValue)" [(ngModel)]="acqTimeoutValue"
+            aria-describedby="basic-addon3" positiveIntegers value="0">
+        <button type="button" (click)="toggleRegime(acqTimeoutValue)" id="enableRegimeButton"
+            [textContent]="acqTimeoutEnabled ? 'Disable' : 'Enable'" class="btn btn-dark">Enable</button>
     </div>
-    <div [ngClass]="{'d-none' : !acqTimeoutEnabled}" class="mb-2" id="acqTimeoutContainer">ACQ Timeout countdown [s]: <span id="acqTimeout" [textContent]="acqTimeout">0</span></div>
+    <div [ngClass]="{'d-none' : !acqTimeoutEnabled}" class="progress mb-2 position-relative">
+        <div class="progress-bar progress-bar-striped" role="progressbar"
+            [ngStyle]="{width: (timer.realTime || 0) / this.acqTimeout * 100 +'%'}"
+            [attr.aria-valuenow]="(timer.realTime || 0) / this.acqTimeout * 100" aria-valuemin="0" aria-valuemax="100">
+        </div>
+        <small class="justify-content-center d-flex position-absolute w-100"
+            [textContent]="(acqTimeout - (timer.realTime || 0)) + 's'">0s</small>
+    </div>
+    <div class="mb-2"></div>
+    <!-- <div [ngClass]="{'d-none' : !acqTimeoutEnabled}" class="mb-2" id="acqTimeoutContainer">ACQ Timeout countdown [s]: <span [textContent]="acqTimeout">0</span></div> -->
 </div>

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
+import { IncomingData } from "src/app/types/data.type";
 
 export interface DataSourceService {
-  cast(data: any): any;
+  cast(data: IncomingData): any;
 }

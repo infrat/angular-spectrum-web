@@ -9,6 +9,8 @@ import { ParametersService } from '../parameters.service';
 import { NgEventBus } from 'ng-event-bus';
 import { EventsEnum } from 'src/app/events.enum';
 import { ConnectionStatusEnum } from 'src/app/connection.status.enum';
+import { IncomingData } from 'src/app/types/data.type';
+import { timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,23 +20,22 @@ export class SerialDataSourceService implements DataSourceService {
   private port: any;
   private writer: any;
   private handlerTimeout: any;
+  public castActive: boolean = false;
+  public connectionStatus: string = ConnectionStatusEnum.DISCONNECTED;
 
   constructor(private logger: LoggerService, private params: ParametersService, private eventBus: NgEventBus) { }
-
-  connectToggle = true;
-  connectionStatus = ConnectionStatusEnum.DISCONNECTED;
 
   async connect() {
     try {
       // Prompt user to select any serial port.
       this.port = await navigator.serial.requestPort();
       await this.port.open({ baudRate: serialConfig.BAUDRATE });
-
+      this.castActive = true;
       const textEncoder = new TextEncoderStream();
       textEncoder.readable.pipeTo(this.port.writable);
       this.writer = textEncoder.writable.getWriter();
       if (this.params.get('autoReset')) {
-        this.clearSpectrumBuffer();
+        this.clearBuffer();
       }
       this.connectionStatus = ConnectionStatusEnum.CONNECTED;
       this.eventBus.cast(EventsEnum.DEVICE_CONNECTED);
@@ -46,12 +47,12 @@ export class SerialDataSourceService implements DataSourceService {
     }
   }
 
-  clearSpectrumBuffer() {
+  public clearBuffer() {
     this.writer.write("clear spectrum\r\n");
-    this.eventBus.cast(EventsEnum.GLOBAL_TIMER_RESET);
+    this.deferCast(500);
   }
 
-  async listenToPort() {
+  public async listenToPort() {
     let output = "";
     const textDecoder = new TextDecoderStream();
     this.port.readable.pipeTo(
@@ -82,7 +83,7 @@ export class SerialDataSourceService implements DataSourceService {
 
             if (data.length === globalConfig.VALUES_COUNT) {
               clearTimeout(serialTimeout);
-              this.cast(data);
+              this.cast(data.map((value: string) => parseInt(value)));
               output = "";
             }
             // failover
@@ -102,17 +103,27 @@ export class SerialDataSourceService implements DataSourceService {
     }
   }
 
-  enableTimeout() {
+  public enableTimeout() {
     return setTimeout(() => {
       this.logger.error('Data timeout error.', true);
     }, 5000);
   }
 
-  cast(data: any) {
-    this.eventBus.cast(EventsEnum.INCOMING_DATA, data.map((value: string) => parseInt(value)));
+  public cast(data: IncomingData) {
+    if (!this.castActive) {
+      return;
+    }
+    // get rid of CRC value
+    data.shift();
+    this.eventBus.cast(EventsEnum.INCOMING_DATA, data);
   }
 
-  close() {
+  public deferCast(msTime: number) {
+    this.castActive = false;
+    timer(msTime).subscribe(() => this.castActive = true);
+  }
+
+  public close() {
     
   }
 

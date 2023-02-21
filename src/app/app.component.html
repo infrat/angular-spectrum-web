@@ -6,10 +6,11 @@
   </div>
   <div class="row">
     <div class="col-9">
-      <app-chart></app-chart>
+      <app-chart (spectrumCapacity)="sidebarControls.setSpectrumCapacity($event)"
+        (backgroundCapacity)="sidebarControls.setBackgroundCapacity($event)"></app-chart>
     </div>
     <div class="col-3">
-      <app-sidebar-controls (setOrigin)="setOrigin($event)"></app-sidebar-controls>
+      <app-sidebar-controls (setOrigin)="setOrigin($event)" (exportBuffer)="chart.exportBuffer($event)"></app-sidebar-controls>
       <app-sidebar-status></app-sidebar-status>
     </div>
   </div>
