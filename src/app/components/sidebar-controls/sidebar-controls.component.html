@@ -1,0 +1,27 @@
+<div class="d-grid gap-2">
+    <button (click)="connect()"
+        [ngClass]="{'btn-success' : dataSource.connectionStatus === connectionStatus.CONNECTED, 'btn-outline-dark': dataSource.connectionStatus === connectionStatus.DISCONNECTED}"
+        class="btn btn-outline-dark btn-sm" id="connect-btn">Connect</button>
+    <button onclick="app.resetSession()" class="btn btn-outline-dark btn-block btn-sm">Reset
+        session</button>
+    <button class="btn btn-outline-dark btn-block btn-sm" (click)="openSettings()">ACQ Settings</button>
+    <button onclick="app.exportSPE('background')" id="exportBackgroundSPE" class="btn btn-outline-dark btn-block btn-sm"
+        disabled>Export Background SPE</button>
+    <button onclick="app.exportSPE('spectrum')" id="exportSpectrumSPE" class="btn btn-outline-dark btn-block btn-sm"
+        disabled>Export Spectrum SPE</button>
+
+    <input (click)="acqBackground()" type="radio" class="btn-check" name="btnradio" id="acq-background" checked>
+    <label class="btn btn-outline-dark btn-block btn-sm" for="acq-background">ACQ Background (RT [s]: <span
+            [textContent]="backgroundRt">0</span>)</label>
+
+    <input (click)="acqSpectrum()" type="radio" class="btn-check" name="btnradio" id="acq-spectrum">
+    <label class="btn btn-outline-dark btn-block btn-sm" for="acq-spectrum">ACQ Spectrum (RT [s]: <span
+            [textContent]="spectrumRt">0</span>)</label>
+    <div class="input-group">
+        <span class="input-group-text" id="basic-addon3">ACQ Time [s]</span>
+        <input type="text" class="form-control" [(ngModel)]="acqTimeoutValue" aria-describedby="basic-addon3" positiveIntegers
+            value="0">
+        <button type="button" (click)="enableRegime(acqTimeoutValue)" id="enableRegimeButton" [textContent]="acqTimeoutEnabled ? 'Disable' : 'Enable'" class="btn btn-dark">Enable</button>
+    </div>
+    <div [ngClass]="{'d-none' : !acqTimeoutEnabled}" class="mb-2" id="acqTimeoutContainer">ACQ Timeout countdown [s]: <span id="acqTimeout" [textContent]="acqTimeout">0</span></div>
+</div>

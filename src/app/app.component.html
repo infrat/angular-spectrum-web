@@ -1,44 +1,3 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-<style>
-  .btn-group-xs>.btn,
-  .btn-xs {
-    padding: .25rem .4rem;
-    font-size: .875rem;
-    line-height: .5;
-    border-radius: .2rem;
-  }
-
-  #linkActivity {
-    width: 30px;
-    height: 30px;
-    background: gray;
-    -moz-border-radius: 50px;
-    -webkit-border-radius: 50px;
-    border-radius: 50px;
-  }
-
-  #measurementActivity {
-    width: 30px;
-    height: 30px;
-    background: gray;
-    -moz-border-radius: 50px;
-    -webkit-border-radius: 50px;
-    border-radius: 50px;
-  }
-
-  .chart-container {
-    height: 470px;
-  }
-</style>
-
 <div class="container">
   <div class="pb-3 pt-3 row">
     <div class="col">
@@ -46,88 +5,12 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-8">
-      <div class="chart-container">
-        <canvas id="chart"></canvas>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-5">
-            <label>Y</label>
-            <div class="btn-group ps-2">
-              <input type="radio" class="btn-check" name="chart-scale" id="linear-scale" autocomplete="off" checked>
-              <label class="btn btn-outline-dark btn-sm" for="linear-scale">Lin</label>
-              <input type="radio" class="btn-check" name="chart-scale" id="log-scale" autocomplete="off">
-              <label class="btn btn-outline-dark btn-sm" for="log-scale">Log</label>
-            </div>
-            <div class="btn-group ps-2">
-              <input type="radio" class="btn-check" name="y-transform" id="y-total" autocomplete="off" checked>
-              <label class="btn btn-outline-dark btn-sm" for="y-total">Total</label>
-              <input type="radio" class="btn-check" name="y-transform" id="y-cps" autocomplete="off">
-              <label class="btn btn-outline-dark btn-sm" for="y-cps">CPS</label>
-            </div>
-          </div>
-          <div class="col-4">
-            <label>X</label>
-            <div class="btn-group ps-2">
-              <input type="radio" class="btn-check" name="x-transform" id="x-channel" autocomplete="off" checked>
-              <label class="btn btn-outline-dark btn-sm" for="x-channel">Channel</label>
-              <input type="radio" class="btn-check" name="x-transform" id="x-energy" autocomplete="off">
-              <label class="btn btn-outline-dark btn-sm" for="x-energy">Energy</label>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="btn-group ps-2">
-              <input type="radio" class="btn-check" name="chart-type" id="point" autocomplete="off" checked>
-              <label class="btn btn-outline-dark btn-sm" for="point">Point</label>
-              <input type="radio" class="btn-check" name="chart-type" id="line" autocomplete="off">
-              <label class="btn btn-outline-dark btn-sm" for="line">Line</label>
-              <input type="radio" class="btn-check" name="chart-type" id="bar" autocomplete="off">
-              <label class="btn btn-outline-dark btn-sm" for="bar">Bar</label>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="col-9">
+      <app-chart></app-chart>
     </div>
-    <div class="col-4">
-      <div class="d-grid gap-2">
-        <button onclick="app.connectSerial()" class="btn btn-outline-dark btn-sm" id="connect-btn">Connect</button>
-        <button onclick="app.resetSession()" class="btn btn-outline-dark btn-block btn-sm">Reset
-          session</button>
-        <button class="btn btn-outline-dark btn-block btn-sm" (click)="openSettings()">ACQ Settings</button>
-        <button onclick="app.exportSPE('background')" id="exportBackgroundSPE"
-          class="btn btn-outline-dark btn-block btn-sm" disabled>Export Background SPE</button>
-        <button onclick="app.exportSPE('spectrum')" id="exportSpectrumSPE" class="btn btn-outline-dark btn-block btn-sm"
-          disabled>Export Spectrum SPE</button>
-
-        <button onclick="app.acqBackground()" class="btn btn-dark btn-block btn-sm" id="acq-background">ACQ
-          Background</button>
-        <button onclick="app.acqSpectrum()" class=" btn btn-outline-dark btn-block btn-sm" id="acq-spectrum">ACQ
-          Spectrum</button>
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon3">ACQ Time [s]</span>
-          <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-          <button type="button" onclick="app.enableRegime()" id="enableRegimeButton"
-            class="btn btn-dark">Enable</button>
-          <!-- <button type="button" onclick="app.disableRegime()" id="disableRegimeButton"
-            class="d-none btn btn-dark">Disable</button> -->
-        </div>
-      </div>
-
-      <div class="mt-2 d-flex">
-        <div id="linkActivity" class="me-2" ngbTooltip="Indicates incoming data from serial connection."></div>
-        <div id="measurementActivity" ngbTooltip="Indicates main app's timer."></div>
-      </div>
-      <div class="mt-2">Counts/s: <span id="valueCps">0</span></div>
-      <div class="mt-2 d-none" id="acqTimeoutContainer">ACQ Timeout countdown [s]: <span id="acqTimeout">0</span></div>
-      <div class="mt-2">RT [s]: <span id="valueRT">0</span></div>
-      <div class="mt-2">LT [s]: <span id="valueLT">0</span></div>
-      <div class="mt-2">Dead time </div>
-      <div class="mt-2 progress position-relative">
-        <div class="progress-bar" id="valueDTPercentage" role="progressbar" style="width: 0%" aria-valuenow="0"
-          aria-valuemin="0" aria-valuemax="100"></div>
-        <small id="valueDTPercentageLabel" class="justify-content-center d-flex position-absolute w-100">0%</small>
-      </div>
+    <div class="col-3">
+      <app-sidebar-controls (setOrigin)="setOrigin($event)"></app-sidebar-controls>
+      <app-sidebar-status></app-sidebar-status>
     </div>
   </div>
 </div>

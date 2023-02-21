@@ -1,0 +1,52 @@
+<div class="chart-container">
+        <div class="chart-container">
+                <canvas baseChart class="chart" [data]="chartData" [options]="chartOptions" [type]="chartConfig.chartType"></canvas>
+        </div>
+</div>
+<div class="container">
+        <div class="row">
+                <div class="col-5">
+                        <label>Y</label>
+                        <div class="btn-group ps-2">
+                                <input type="radio" class="btn-check" name="chart-scale" id="linear-scale"
+                                        autocomplete="off" (click)="setYScaleType('linear')" checked>
+                                <label class="btn btn-outline-dark btn-sm" for="linear-scale">Lin</label>
+                                <input type="radio" class="btn-check" name="chart-scale" id="log-scale"
+                                        autocomplete="off" (click)="setYScaleType('logarithmic')">
+                                <label class="btn btn-outline-dark btn-sm" for="log-scale">Log</label>
+                        </div>
+                        <div class="btn-group ps-2">
+                                <input type="radio" class="btn-check" name="y-transform" id="y-total" autocomplete="off"
+                                        checked (click)="setYAxisType('total')">
+                                <label class="btn btn-outline-dark btn-sm" for="y-total">Total</label>
+                                <input type="radio" class="btn-check" name="y-transform" id="y-cps" autocomplete="off"
+                                        (click)="setYAxisType('cps')">
+                                <label class="btn btn-outline-dark btn-sm" for="y-cps">CPS</label>
+                        </div>
+                </div>
+                <div class="col-4">
+                        <label>X</label>
+                        <div class="btn-group ps-2">
+                                <input type="radio" class="btn-check" name="x-transform" id="x-channel"
+                                        autocomplete="off" checked>
+                                <label class="btn btn-outline-dark btn-sm" for="x-channel">Channel</label>
+                                <input type="radio" class="btn-check" name="x-transform" id="x-energy"
+                                        autocomplete="off">
+                                <label class="btn btn-outline-dark btn-sm" for="x-energy">Energy</label>
+                        </div>
+                </div>
+                <div class="col-3">
+                        <div class="btn-group ps-2">
+                                <input type="radio" class="btn-check" name="chart-type" id="point" autocomplete="off"
+                                        checked (click)="setChartType('scatter')">
+                                <label class="btn btn-outline-dark btn-sm" for="point">Point</label>
+                                <input type="radio" class="btn-check" name="chart-type" id="line" autocomplete="off"
+                                        (click)="setChartType('line')">
+                                <label class="btn btn-outline-dark btn-sm" for="line">Line</label>
+                                <input type="radio" class="btn-check" name="chart-type" id="bar" autocomplete="off"
+                                        (click)="setChartType('bar')">
+                                <label class="btn btn-outline-dark btn-sm" for="bar">Bar</label>
+                        </div>
+                </div>
+        </div>
+</div>
