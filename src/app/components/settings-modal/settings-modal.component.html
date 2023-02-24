@@ -1,134 +1,157 @@
 
-<div class="modal-header">
-    <h4 class="modal-title">Settings</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
-</div>
-<div class="modal-body">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-5 d-grid gap-3">
-                <h5>Acquire</h5>
+<form (ngSubmit)="onSubmit(settingsForm)" #settingsForm="ngForm">
+    <div class="modal-header">
+        <h4 class="modal-title">Settings</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-5 d-grid gap-3">
+                        <h5>Acquire</h5>
 
-                <div class="row">
-                    <label for="settingsDDL" class="col-sm-5 col-form-label">DDL</label>
-                    <div class="col-sm-5">
-                        <input type="number"
-                            class="form-control calibration-min-max calibration-numbers-positive-integers" value="0"
-                            min="0" max="4095" id="settingsDDL">
-                    </div>
-                </div>
-                <div class="row">
-                    <label for="settingsUDL" class="col-sm-5 col-form-label">UDL</label>
-                    <div class="col-sm-5">
-                        <input type="number"
-                            class="form-control calibration-min-max calibration-numbers-positive-integers" value="4095"
-                            min="0" max="4095" id="settingsUDL">
-                    </div>
-                </div>
-                <div class="row">
-                    <label for="settingsAveraging" class="col-sm-5 col-form-label">Averaging</label>
-                    <div class="col-sm-5">
-                        <input type="number" class="form-control calibration-numbers-integers" value="1"
-                            id="settingsAveraging">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-10">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="settingsAutoReset">
-                            <label class="form-check-label" for="settingsAutoReset">Auto reset</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-10 ps-2 row d-grid gap-3">
-                    <button onclick="" class="btn btn-outline-dark btn-block">Defaults</button>
-                    <button onclick="" class="btn btn-outline-dark btn-block">Reboot</button>
-                    <button onclick="" class="btn btn-outline-dark btn-block btn-lg">Send command</button>
-                </div>
-            </div>
-            <div class="col-sm-7 d-grid gap-3">
-                <h5>Calibration</h5>
-                <div class="row">
-                    <div class="col-sm-6 d-grid gap-3">
                         <div class="row">
-                            <label for="settingsChA" class="col-sm-5 col-form-label">Channel A</label>
+                            <label for="settingsDDL" class="col-sm-5 col-form-label">DDL 
+                                <span [hidden]="DDL.valid || DDL.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
+                            </label>
                             <div class="col-sm-5">
-                                <input type="number" min="0" max="4095" value="0"
-                                    class="form-control calibration-min-max calibration-numbers-positive-integers"
-                                    id="settingsChA">
+                                <input type="number" [(ngModel)]="model.data.DDL" #DDL="ngModel" name="DDL"
+                                    class="form-control" value="0"
+                                    min="0" max="4094" id="settingsDDL" required>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="settingsChB" class="col-sm-5 col-form-label">Channel B</label>
+                            <label for="settingsUDL" class="col-sm-5 col-form-label">UDL
+                                <span [hidden]="UDL.valid || UDL.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
+                            </label>
                             <div class="col-sm-5">
-                                <input type="number" min="0" max="4095" value="4095"
-                                    class="form-control calibration-min-max calibration-numbers-positive-integers"
-                                    id="settingsChB">
+                                <input type="number" [(ngModel)]="model.data.UDL" #UDL="ngModel" name="UDL"
+                                    class="form-control" value="4094"
+                                    min="0" max="4094" id="settingsUDL" required>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="settingsChC" class="col-sm-5 col-form-label">Channel C</label>
+                            <label for="settingsAveraging" class="col-sm-5 col-form-label">Averaging
+                                <span [hidden]="averaging.valid || averaging.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
+                            </label>
                             <div class="col-sm-5">
-                                <input type="number" min="0" max="4095" value="1"
-                                    class="form-control calibration-min-max calibration-numbers-positive-integers"
-                                    id="settingsChC">
+                                <input type="number" [(ngModel)]="model.data.averaging" name="averaging" #averaging="ngModel" class="form-control" value="1"
+                                    id="settingsAveraging" required>
                             </div>
                         </div>
-
-                    </div>
-                    <div class="col-sm-6 d-grid gap-3">
-                        <div class="row">
-                            <label for="settingsEnA" class="col-sm-5 col-form-label">Energy A</label>
-                            <div class="col-sm-5">
-                                <input type="number" class="form-control calibration-numbers-floats" value="0"
-                                    id="settingsEnA">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label for="settingsEnB" class="col-sm-5 col-form-label">Energy B</label>
-                            <div class="col-sm-5">
-                                <input type="number" class="form-control calibration-numbers-floats" value="4095"
-                                    id="settingsEnB">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label for="settingsEnC" class="col-sm-5 col-form-label">Energy C</label>
-                            <div class="col-sm-5">
-                                <input type="number" class="form-control calibration-numbers-floats" value="1"
-                                    id="settingsEnC">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row pt-5 ">
-                    <div class="col-sm-5">
                         <div class="row">
                             <div class="col-sm-10">
-                                <button onclick="appSettings.calculateCalibration()"
-                                    class="btn btn-outline-dark btn-block">Execute calibration</button>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" [(ngModel)]="model.data.autoReset" #autoReset="ngModel" name="autoReset"  id="settingsAutoReset">
+                                    <label class="form-check-label" for="settingsAutoReset">Auto reset</label>
+                                </div>
                             </div>
+                        </div>
+                        <div class="col-sm-10 ps-2 row d-grid gap-3">
+                            <button onclick="" class="btn btn-outline-dark btn-block">Defaults</button>
+                            <button onclick="" class="btn btn-outline-dark btn-block">Reboot</button>
+                            <button onclick="" class="btn btn-outline-dark btn-block btn-lg">Send command</button>
                         </div>
                     </div>
                     <div class="col-sm-7 d-grid gap-3">
+                        <h5>Calibration</h5>
                         <div class="row">
-                            <label for="settingsRatioA" class="col-sm-2 col-form-label">a</label>
-                            <div class="col-sm-8">
-                                <input type="number" class="form-control" value="1" id="settingsRatioA" readonly>
+                            <div class="col-sm-6 d-grid gap-3">
+                                <div class="row">
+                                    <label for="settingsChA" class="col-sm-5 col-form-label">Channel A
+                                        <span [hidden]="channelA.valid || channelA.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <input type="number" [(ngModel)]="model.data.channelA" (ngModelChange)="dirtify('channelA', $event)" #channelA="ngModel" name="channelA" min="0" max="4095" value="0"
+                                            class="form-control"
+                                            id="settingsChA" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="settingsChB" class="col-sm-5 col-form-label">Channel B
+                                        <span [hidden]="channelB.valid || channelB.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <input type="number" [(ngModel)]="model.data.channelB" (ngModelChange)="dirtify('channelB', $event)" #channelB="ngModel" name="channelB" min="0" max="4095" value="4095"
+                                            class="form-control calibration-min-max calibration-numbers-positive-integers"
+                                            id="settingsChB" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="settingsChC" class="col-sm-5 col-form-label">Channel C
+                                        <span [hidden]="channelC.valid || channelC.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <input type="number" [(ngModel)]="model.data.channelC" (ngModelChange)="dirtify('channelC', $event)" #channelC="ngModel" name="channelC" min="0" max="4095" value="1"
+                                            class="form-control calibration-min-max calibration-numbers-positive-integers"
+                                            id="settingsChC" required>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-6 d-grid gap-3">
+                                <div class="row">
+                                    <label for="settingsEnA" class="col-sm-5 col-form-label">Energy A
+                                        <span [hidden]="energyA.valid || energyA.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <input type="number" [(ngModel)]="model.data.energyA" (ngModelChange)="dirtify('energyA', $event)" #energyA="ngModel" name="energyA" class="form-control calibration-numbers-floats" value="0"
+                                            id="settingsEnA" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="settingsEnB" class="col-sm-5 col-form-label">Energy B
+                                        <span [hidden]="energyB.valid || energyB.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <input type="number" [(ngModel)]="model.data.energyB" (ngModelChange)="dirtify('energyB', $event)" #energyB="ngModel" name="energyB" class="form-control calibration-numbers-floats" value="4095"
+                                            id="settingsEnB" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="settingsEnC" class="col-sm-5 col-form-label">Energy C
+                                        <span [hidden]="energyC.valid || energyC.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <input type="number" [(ngModel)]="model.data.energyC" (ngModelChange)="dirtify('energyC', $event)" #energyC="ngModel" name="energyC" class="form-control calibration-numbers-floats" value="1"
+                                            id="settingsEnC" required>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <label for="settingsRatioB" class="col-sm-2 col-form-label">b</label>
-                            <div class="col-sm-8">
-                                <input type="number" class="form-control" value="0" id="settingsRatioB" readonly>
+                        <div class="row pt-5 ">
+                            <div class="col-sm-5">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <button type="button" (click)="calibrate()"
+                                            class="btn btn-outline-dark btn-block">Execute calibration</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-7 d-grid gap-3">
+                                <div class="row">
+                                    <label for="settingsRatioA" class="col-sm-2 col-form-label">a</label>
+                                    <div class="col-sm-8">
+                                        <input type="number" [(ngModel)]="model.data.ratioA" #ratioA="ngModel" name="ratioA" class="form-control" value="1" id="settingsRatioA" readonly>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="settingsRatioB" class="col-sm-2 col-form-label">b</label>
+                                    <div class="col-sm-8">
+                                        <input type="number" [(ngModel)]="model.data.ratioB" #ratioB="ngModel" name="ratioB" class="form-control" value="0" id="settingsRatioB" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div [hidden]="!calibrationIsDirty" class="alert alert-danger mt-2" role="alert">
+                                You have to execute new calibration values before saving this form.
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Close</button>
-    <button type="button" onclick="appSettings.save()" class="btn btn-primary">Save changes</button>
-</div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Close</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!settingsForm.valid || calibrationIsDirty">Save changes</button>
+    </div>
+</form>

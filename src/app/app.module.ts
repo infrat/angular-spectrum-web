@@ -17,6 +17,7 @@ import { PositiveIntegersDirective } from './directives/positive-integers.direct
 import { IntegersDirective } from './directives/integers.directive';
 import { FloatsDirective } from './directives/floats.directive';
 import { FormsModule } from '@angular/forms';
+import { SettingsModalComponent } from './components/settings-modal/settings-modal.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { FormsModule } from '@angular/forms';
     PositiveIntegersDirective,
     IntegersDirective,
     FloatsDirective,
+    SettingsModalComponent
   ],
   imports: [
     BrowserModule,

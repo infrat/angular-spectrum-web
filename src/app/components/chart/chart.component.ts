@@ -4,18 +4,16 @@ import { Chart, ChartConfiguration, ChartEvent, ChartType, ScaleType } from 'cha
 import { BaseChartDirective } from 'ng2-charts';
 
 import { default as Annotation } from 'chartjs-plugin-annotation';
-import { LoggerService } from 'src/app/services/logger.service';
 import { DataBuffer, DataOrigin, BufferMapping, IncomingDataBuffer } from './buffer';
 import { ParametersService } from 'src/app/services/parameters.service';
 import { transformX, transformY } from 'src/app/services/data-transformers';
 import { TimerService } from 'src/app/services/timer.service';
 import { ChartConfigurationService } from 'src/app/services/chart.configuration.service';
-import { ChartYAxisType } from './chart-types';
+import { ChartXAxisType, ChartYAxisType } from './chart-types';
 import { Datable } from 'src/app/interfaces/datable.interface';
 import { IncomingData } from 'src/app/types/data.type';
-import { Data } from '@angular/router';
 import { BufferHistoryMetadata, HistoryMetadata } from 'src/app/types/buffer-metadata.type';
-import { MetaData } from 'ng-event-bus';
+import { default as ZoomPlugin } from 'chartjs-plugin-zoom';
 
 @Component({
   selector: 'app-chart',
@@ -26,6 +24,7 @@ export class ChartComponent implements Datable {
 
   constructor(private params: ParametersService, private timer: TimerService, public chartConfig: ChartConfigurationService) {
     Chart.register(Annotation);
+    Chart.register(ZoomPlugin);
   }
   public active: boolean = true;
   protected _origin: DataOrigin = 'background';
@@ -35,10 +34,13 @@ export class ChartComponent implements Datable {
 
   // contains data coming from source
   public incomingData: IncomingDataBuffer = { background: [], spectrum: [] };
+
   // contains data object with assigned channel as x and total value as y
   public rawBuffer: DataBuffer = { background: [], spectrum: [] };
+
   // contains data object with transformed x and transformed y
   public buffer: DataBuffer = { background: [], spectrum: [] };
+
   // contains metadata describing buffer content
   protected metadata: BufferHistoryMetadata = { 
     background: { startTime: undefined, realTime: 0, liveTime: 0, deadTime: 0 }, 
@@ -74,6 +76,12 @@ export class ChartComponent implements Datable {
 
   public setYAxisType(yAxisType: ChartYAxisType) {
     this.chartConfig.yAxisType = yAxisType;
+    this.chart?.render();
+    this.rebuild();
+  }
+
+  public setXAxisType(xAxisType: ChartXAxisType) {
+    this.chartConfig.xAxisType = xAxisType;
     this.chart?.render();
     this.rebuild();
   }
@@ -166,8 +174,8 @@ export class ChartComponent implements Datable {
     let originList: DataOrigin[] = origin ? [origin] : ['background', 'spectrum'];
     originList.forEach((origin) => {
       const data = this.incomingData[origin];
-      const settingsDDL = this.params.get('settingsDDL');
-      const settingsUDL = this.params.get('settingsUDL');
+      const settingsDDL = this.params.get('DDL');
+      const settingsUDL = this.params.get('UDL');
       if (data.length === 0) {
         return;
       }
@@ -177,8 +185,17 @@ export class ChartComponent implements Datable {
 
         let x = channel;
         let y = data[x];
-        let xTransformed = transformX(x, {});
-        let yTransformed = transformY(y, { yAxisType: this.chartConfig.yAxisType, realTime: this.timer.realTime });
+
+        let xTransformed = transformX(x, { 
+          xAxisType: this.chartConfig.xAxisType, 
+          ratioA: this.params.get('ratioA') as number,
+          ratioB: this.params.get('ratioA') as number 
+        });
+
+        let yTransformed = transformY(y, { 
+          yAxisType: this.chartConfig.yAxisType, 
+          realTime: this.timer.realTime 
+        });
         if (channel >= settingsDDL && channel <= settingsUDL) {
           this.buffer[origin].push({
             x: xTransformed,

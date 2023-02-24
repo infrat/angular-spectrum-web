@@ -46,6 +46,20 @@ export class ChartConfigurationService {
         intersect: false
       },
       legend: { display: false },
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true
+          },
+          mode: 'xy',
+        },
+        pan: {
+          enabled: true
+        }
+      }
     },
     scales: {
       x: {
@@ -55,11 +69,11 @@ export class ChartConfigurationService {
       y: {
         type: this.yAxisScale,
         position: 'bottom',
-        ticks: {
-          callback: function (value, index, values) {
-            return Number(value.toString());
-          },
-        },
+        // ticks: {
+        //   callback: function (value, index, values) {
+        //     return Number(value.toString());
+        //   },
+        // },
       },
     },
   };

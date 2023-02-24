@@ -51,7 +51,7 @@ export class SidebarControlsComponent implements Timeable {
 
   public toggleRegime(acqTimeoutValue: number) {
     if (!this.acqTimeoutEnabled && acqTimeoutValue <= this.timer.realTime) {
-      alert('ACQ Timeout value can\'t be smaller than actual Real Time value');
+      alert('ACQ Timeout value must be greater than actual Real Time value');
       return;
     }
     this.acqTimeoutEnabled = !this.acqTimeoutEnabled;

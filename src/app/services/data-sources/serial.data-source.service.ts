@@ -28,7 +28,7 @@ export class SerialDataSourceService implements DataSourceService {
   async connect() {
     try {
       // Prompt user to select any serial port.
-      this.port = await navigator.serial.requestPort();
+      this.port = await navigator.serial.requestPort({ filters: [{ usbVendorId: 0x2e8a, usbProductId: 0x000a }]});
       await this.port.open({ baudRate: serialConfig.BAUDRATE });
       this.castActive = true;
       const textEncoder = new TextEncoderStream();
