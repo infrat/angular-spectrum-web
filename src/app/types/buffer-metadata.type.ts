@@ -1,0 +1,2 @@
+export type HistoryMetadata = { startTime: number|undefined, realTime: number, liveTime: number, deadTime: number };
+export type BufferHistoryMetadata = { background: HistoryMetadata, spectrum: HistoryMetadata };
