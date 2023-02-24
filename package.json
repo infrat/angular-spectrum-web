@@ -7,7 +7,7 @@
     "start": "ng serve",
     "start:electron": "ng build --base-href ./ && electron .",
     "build": "ng build",
-    "build:prod": "ng build -c production",
+    "build:prod": "ng build --base-href ./ -c production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "pack": "ng build -c production && electron-builder build --publish=never",
