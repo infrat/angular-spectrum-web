@@ -106,7 +106,21 @@ export class ChartConfigurationService {
     animation: false,
     plugins: { 
       tooltip: { intersect: false },
-      legend: { display: false } 
+      legend: { display: false },
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true
+          },
+          mode: 'xy',
+        },
+        pan: {
+          enabled: true
+        }
+      }
     },
     scales: {
       x: {
@@ -153,6 +167,20 @@ export class ChartConfigurationService {
       tooltip: {
         intersect: false
       },
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true
+          },
+          mode: 'xy',
+        },
+        pan: {
+          enabled: true
+        }
+      }
     },
     scales: {
       x: {
