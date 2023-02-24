@@ -32,4 +32,4 @@ jobs:
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.run_number }}
-          rekease_name: Release ${{ girhub.run_number }}
+          rekease_name: Release ${{ github.run_number }}
