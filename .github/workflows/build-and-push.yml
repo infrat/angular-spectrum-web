@@ -28,8 +28,8 @@ jobs:
           type: 'zip'
           filename: 'release.zip'
           path: './dist/angular-spectrum-web'
-      - name: Upload Release
-        uses: ncipollo/release-action@v1.12.0
+      - name: Create GitHub release
+        uses: actions/create-release@v1
         with:
-          artifacts: "release.zip"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.run_number }}
+          rekease_name: Release ${{ girhub.run_number }}
