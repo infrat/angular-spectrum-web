@@ -29,6 +29,7 @@ jobs:
           filename: 'release.zip'
           path: './dist/angular-spectrum-web'
       - name: Create GitHub release
+        id: create-new-release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -39,3 +40,8 @@ jobs:
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-new-release.outputs.upload_url }}
+          asset_path: ./site.zip
+          asset-name: site-v${{ github.run_number }}.zip
+          asset-content-type: application/zip
