@@ -15,7 +15,7 @@
                                 <span [hidden]="DDL.valid || DDL.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
                             </label>
                             <div class="col-sm-5">
-                                <input type="number" [(ngModel)]="model.data.DDL" #DDL="ngModel" name="DDL"
+                                <input type="number" positiveIntegers [(ngModel)]="model.data.DDL" #DDL="ngModel" name="DDL"
                                     class="form-control" value="0"
                                     min="0" max="4094" id="settingsDDL" required>
                             </div>
@@ -25,7 +25,7 @@
                                 <span [hidden]="UDL.valid || UDL.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
                             </label>
                             <div class="col-sm-5">
-                                <input type="number" [(ngModel)]="model.data.UDL" #UDL="ngModel" name="UDL"
+                                <input type="number" positiveIntegers [(ngModel)]="model.data.UDL" #UDL="ngModel" name="UDL"
                                     class="form-control" value="4094"
                                     min="0" max="4094" id="settingsUDL" required>
                             </div>
@@ -62,7 +62,7 @@
                                         <span [hidden]="channelA.valid || channelA.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
                                     </label>
                                     <div class="col-sm-5">
-                                        <input type="number" [(ngModel)]="model.data.channelA" (ngModelChange)="dirtify('channelA', $event)" #channelA="ngModel" name="channelA" min="0" max="4095" value="0"
+                                        <input type="number" positiveIntegers [(ngModel)]="model.data.channelA" (ngModelChange)="dirtify('channelA', $event)" #channelA="ngModel" name="channelA" min="0" max="4095" value="0"
                                             class="form-control"
                                             id="settingsChA" required>
                                     </div>
@@ -72,7 +72,7 @@
                                         <span [hidden]="channelB.valid || channelB.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
                                     </label>
                                     <div class="col-sm-5">
-                                        <input type="number" [(ngModel)]="model.data.channelB" (ngModelChange)="dirtify('channelB', $event)" #channelB="ngModel" name="channelB" min="0" max="4095" value="4095"
+                                        <input type="number" positiveIntegers [(ngModel)]="model.data.channelB" (ngModelChange)="dirtify('channelB', $event)" #channelB="ngModel" name="channelB" min="0" max="4095" value="4095"
                                             class="form-control calibration-min-max calibration-numbers-positive-integers"
                                             id="settingsChB" required>
                                     </div>
@@ -82,7 +82,7 @@
                                         <span [hidden]="channelC.valid || channelC.pristine" class="badge text-bg-danger" ngbTooltip="Invalid value">!</span>
                                     </label>
                                     <div class="col-sm-5">
-                                        <input type="number" [(ngModel)]="model.data.channelC" (ngModelChange)="dirtify('channelC', $event)" #channelC="ngModel" name="channelC" min="0" max="4095" value="1"
+                                        <input type="number" positiveIntegers [(ngModel)]="model.data.channelC" (ngModelChange)="dirtify('channelC', $event)" #channelC="ngModel" name="channelC" min="0" max="4095" value="1"
                                             class="form-control calibration-min-max calibration-numbers-positive-integers"
                                             id="settingsChC" required>
                                     </div>

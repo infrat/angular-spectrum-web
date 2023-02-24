@@ -4,7 +4,7 @@ import { Chart, ChartConfiguration, ChartEvent, ChartType, ScaleType } from 'cha
 import { BaseChartDirective } from 'ng2-charts';
 
 import { default as Annotation } from 'chartjs-plugin-annotation';
-import { DataBuffer, DataOrigin, BufferMapping, IncomingDataBuffer } from './buffer';
+import { DataBuffer, DataOrigin, BufferMapping, IncomingDataBuffer, DataOriginEnum } from './buffer';
 import { ParametersService } from 'src/app/services/parameters.service';
 import { transformX, transformY } from 'src/app/services/data-transformers';
 import { TimerService } from 'src/app/services/timer.service';
@@ -27,7 +27,7 @@ export class ChartComponent implements Datable {
     Chart.register(ZoomPlugin);
   }
   public active: boolean = true;
-  protected _origin: DataOrigin = 'background';
+  protected _origin: DataOrigin = DataOriginEnum.BACKGROUND;
 
   public chartData: ChartConfiguration['data'] = this.chartConfig.getChartDatasets();
   public chartOptions: ChartConfiguration['options'] = this.chartConfig.getChartOptions();
@@ -87,7 +87,7 @@ export class ChartComponent implements Datable {
   }
 
   public updateView(origin?: DataOrigin) {
-    let originList: DataOrigin[] = origin ? [origin] : ['background', 'spectrum'];
+    let originList: DataOrigin[] = origin ? [origin] : [DataOriginEnum.BACKGROUND, DataOriginEnum.SPECTRUM];
     originList.forEach((origin) => {
       const originIndex = BufferMapping[origin];
       this.chartData.datasets[originIndex].data = this.buffer[origin];
@@ -113,7 +113,7 @@ export class ChartComponent implements Datable {
 
   public resetSession() {
     this.active = true;
-    this.origin = 'background';
+    this.origin = DataOriginEnum.BACKGROUND;
     this.incomingData = { background: [], spectrum: [] };
     this.rebuild();
   }
@@ -155,7 +155,7 @@ export class ChartComponent implements Datable {
   }
 
   protected clearBuffer(origin?: DataOrigin) {
-    let originList: DataOrigin[] = origin ? [origin] : ['background', 'spectrum'];
+    let originList: DataOrigin[] = origin ? [origin] : [DataOriginEnum.BACKGROUND, DataOriginEnum.SPECTRUM];
     originList.forEach((origin) => {
       this.buffer[origin] = [];
       this.rawBuffer[origin] = [];
@@ -171,7 +171,7 @@ export class ChartComponent implements Datable {
   }
 
   protected fillBuffer(origin?: DataOrigin) {
-    let originList: DataOrigin[] = origin ? [origin] : ['background', 'spectrum'];
+    let originList: DataOrigin[] = origin ? [origin] : [DataOriginEnum.BACKGROUND, DataOriginEnum.SPECTRUM];
     originList.forEach((origin) => {
       const data = this.incomingData[origin];
       const settingsDDL = this.params.get('DDL');

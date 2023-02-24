@@ -4,7 +4,7 @@ import { SettingsModalComponent } from '../settings-modal/settings-modal.compone
 import { ConnectionStatusEnum } from '../../connection.status.enum';
 import { SerialDataSourceService } from '../../services/data-sources/serial.data-source.service';
 import { OutletContext } from '@angular/router';
-import { DataOrigin } from '../chart/buffer';
+import { DataOrigin, DataOriginEnum } from '../chart/buffer';
 import { Timeable } from 'src/app/interfaces/timeable.interface';
 import { TimerService } from 'src/app/services/timer.service';
 import { NgEventBus } from 'ng-event-bus';
@@ -19,9 +19,10 @@ export class SidebarControlsComponent implements Timeable {
   protected connectionStatus: typeof ConnectionStatusEnum = ConnectionStatusEnum;
   protected backgroundRt: number = 0;
   protected spectrumRt: number = 0;
-  protected origin: DataOrigin = 'background';
+  protected origin: DataOrigin = DataOriginEnum.BACKGROUND;
   protected backgroundExportReady: boolean = false; 
   protected spectrumExportReady: boolean = false; 
+  public dataOriginEnum = DataOriginEnum;
   
   protected acqTimeout: number = 0;
   protected acqTimeoutEnabled: boolean = false;
@@ -59,8 +60,8 @@ export class SidebarControlsComponent implements Timeable {
   }
 
   public acqBackground() {
-    this.origin = 'background';
-    this.setOrigin.emit('background');
+    this.origin = DataOriginEnum.BACKGROUND;
+    this.setOrigin.emit(DataOriginEnum.BACKGROUND);
     if (this.dataSource.castActive) {
       this.timer.resetTimer();
       this.dataSource.clearBuffer();
@@ -68,8 +69,8 @@ export class SidebarControlsComponent implements Timeable {
   }
 
   public acqSpectrum() {
-    this.origin = 'spectrum';
-    this.setOrigin.emit('spectrum');
+    this.origin = DataOriginEnum.SPECTRUM;
+    this.setOrigin.emit(DataOriginEnum.SPECTRUM);
     if (this.dataSource.castActive) {
       this.timer.resetTimer();
       this.dataSource.clearBuffer();
@@ -122,7 +123,7 @@ export class SidebarControlsComponent implements Timeable {
     this.dataSource.clearBuffer();
     this.backgroundRt = 0;
     this.spectrumRt = 0;
-    this.origin = 'background';
+    this.origin = DataOriginEnum.BACKGROUND;
     this.acqTimeout = this.acqTimeoutValue;
   }
 }

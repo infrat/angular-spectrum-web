@@ -7,8 +7,31 @@
     "start": "ng serve",
     "start:electron": "ng build --base-href ./ && electron .",
     "build": "ng build",
+    "build:prod": "ng build -c production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "pack": "ng build -c production && electron-builder build --publish=never",
+    "dist": "electron-builder build --publish=never"
+  },
+  "build": {
+    "directories": {
+      "output": "release/"
+    },
+    "files": [
+      "dist/**/*",
+      "app.js"
+    ],
+    "appId": "gamma.analyser",
+    "win": {
+      "target": [
+        "portable"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    }
   },
   "private": true,
   "dependencies": {
@@ -29,18 +52,22 @@
     "chart.js": "4.2.0",
     "chartjs-plugin-annotation": "^2.1.2",
     "chartjs-plugin-zoom": "^2.0.0",
+    "electron-reload": "^2.0.0-alpha.1",
     "ng-event-bus": "^5.1.0",
     "ng2-charts": "^4.1.1",
+    "ngx-build-plus": "^15.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "^15.0.0",
     "@angular-devkit/build-angular": "^15.1.6",
     "@angular/cli": "~15.1.6",
     "@angular/compiler-cli": "^15.1.5",
     "@types/jasmine": "~4.0.0",
     "electron": "^23.1.0",
+    "electron-builder": "^23.6.0",
     "jasmine-core": "~4.3.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",

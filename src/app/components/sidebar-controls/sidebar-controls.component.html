@@ -6,18 +6,18 @@
         [disabled]="dataSource.connectionStatus === connectionStatus.DISCONNECTED">Reset
         session</button>
     <button class="btn btn-outline-dark btn-block btn-sm" (click)="openSettings()">ACQ Settings</button>
-    <button (click)="export('background')" class="btn btn-outline-dark btn-block btn-sm"
+    <button (click)="export(dataOriginEnum.SPECTRUM)" class="btn btn-outline-dark btn-block btn-sm"
         [disabled]="!backgroundExportReady">Export Background SPE</button>
-    <button (click)="export('spectrum')" class="btn btn-outline-dark btn-block btn-sm"
+    <button (click)="export(dataOriginEnum.SPECTRUM)" class="btn btn-outline-dark btn-block btn-sm"
         [disabled]="!spectrumExportReady">Export Spectrum SPE</button>
 
-    <input (click)="acquire('background')" type="radio" class="btn-check" name="btnradio" id="acq-background"
-        [checked]="origin === 'background'">
+    <input (click)="acquire(dataOriginEnum.BACKGROUND)" type="radio" class="btn-check" name="btnradio" id="acq-background"
+        [checked]="origin === dataOriginEnum.BACKGROUND">
     <label class="btn btn-outline-dark btn-block btn-sm" for="acq-background">ACQ Background (RT [s]: <span
             [textContent]="backgroundRt">0</span>)</label>
 
-    <input (click)="acquire('spectrum')" type="radio" class="btn-check" name="btnradio" id="acq-spectrum"
-        [checked]="origin === 'spectrum'">
+    <input (click)="acquire(dataOriginEnum.SPECTRUM)" type="radio" class="btn-check" name="btnradio" id="acq-spectrum"
+        [checked]="origin === dataOriginEnum.SPECTRUM">
     <label class="btn btn-outline-dark btn-block btn-sm" for="acq-spectrum">ACQ Spectrum (RT [s]: <span
             [textContent]="spectrumRt">0</span>)</label>
     <div class="input-group">
@@ -36,5 +36,4 @@
             [textContent]="(acqTimeout - (timer.realTime || 0)) + 's'">0s</small>
     </div>
     <div class="mb-2"></div>
-    <!-- <div [ngClass]="{'d-none' : !acqTimeoutEnabled}" class="mb-2" id="acqTimeoutContainer">ACQ Timeout countdown [s]: <span [textContent]="acqTimeout">0</span></div> -->
 </div>

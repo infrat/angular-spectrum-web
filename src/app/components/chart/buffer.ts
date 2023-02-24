@@ -1,16 +1,20 @@
 import { IncomingData } from "src/app/types/data.type";
 
-export type DataOrigin = 'background' | 'spectrum';
+export enum DataOriginEnum {
+    BACKGROUND = 'background',
+    SPECTRUM = 'spectrum'
+}
+export type DataOrigin = DataOriginEnum.BACKGROUND | DataOriginEnum.SPECTRUM;
 export type ParsedData = { x: number, y: number };
 export type DataBuffer = {
-    background: Array<ParsedData>,
-    spectrum: Array<ParsedData>
+    [DataOriginEnum.BACKGROUND]: Array<ParsedData>,
+    [DataOriginEnum.SPECTRUM]: Array<ParsedData>
 }
 export type IncomingDataBuffer = {
-    background: IncomingData,
-    spectrum: IncomingData
+    [DataOriginEnum.BACKGROUND]: IncomingData,
+    [DataOriginEnum.SPECTRUM]: IncomingData
 }
 export const BufferMapping = {
-    'background': 1,
-    'spectrum': 0
+    [DataOriginEnum.BACKGROUND]: 1,
+    [DataOriginEnum.SPECTRUM]: 0
 }

@@ -18,6 +18,7 @@ import { IntegersDirective } from './directives/integers.directive';
 import { FloatsDirective } from './directives/floats.directive';
 import { FormsModule } from '@angular/forms';
 import { SettingsModalComponent } from './components/settings-modal/settings-modal.component';
+import { APP_BASE_HREF, HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,8 @@ import { SettingsModalComponent } from './components/settings-modal/settings-mod
     FormsModule
   ],
   providers: [
+    { provide: APP_BASE_HREF, useValue: '/' },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     NgEventBus,
     TimerService
   ],
