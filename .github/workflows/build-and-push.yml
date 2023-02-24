@@ -1,7 +1,8 @@
 name: CI / CD for Angular
-on:
+on:  
   push:
-    branches: [ "master" ]
+    tags:
+      - '*'
 
 jobs:
   build-and-deploy:
@@ -19,21 +20,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # - name: Lint
-      #   run: npm run lint
-
-      # - name: Tests
-      #   run: npm run test:prod
-
-      # - name: Replace secret
-      #   uses: cschleiden/replace-tokens@v1
-      #   with:
-      #     tokenPrefix: '{'
-      #     tokenSuffix: '}'
-      #     files: 'src/environments/environment.prod.ts'
-      #   env:
-      #     SECRET_API_KEY: ${{ secrets.API_KEY}}
-
       - name: Build
         run: npm run build:prod
       - name: Archive Release
@@ -47,24 +33,3 @@ jobs:
         with:
           artifacts: "release.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
-
-
-
-
-# name: Build and push archive
-# on: [push]
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - uses: actions/checkout@master
-#     - name: Archive Release
-#       uses: thedoctor0/zip-release@0.7.1
-#       with:
-#         type: 'zip'
-#         filename: 'release.zip'
-#     - name: Upload Release
-#       uses: ncipollo/release-action@v1.12.0
-#       with:
-#         artifacts: "release.zip"
-#         token: ${{ secrets.GITHUB_TOKEN }}
