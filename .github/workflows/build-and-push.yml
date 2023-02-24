@@ -43,5 +43,5 @@ jobs:
         with:
           upload_url: ${{ steps.create-new-release.outputs.upload_url }}
           asset_path: ./site.zip
-          asset-name: site-v${{ github.run_number }}.zip
+          asset-name: site-v${{ github.ref }}.zip
           asset-content-type: application/zip
