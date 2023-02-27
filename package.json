@@ -1,6 +1,6 @@
 {
   "name": "angular-spectrum-web",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "main": "app.js",
   "scripts": {
     "ng": "ng",
